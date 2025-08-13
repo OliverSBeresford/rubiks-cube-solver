@@ -113,6 +113,17 @@ class Cube:
         :param direction: 'clockwise' or 'counterclockwise'
         """
         
+        # Handle special cases for middle, equator, and slice turns
+        if face == 'Middle':
+            self.turn_middle(direction)
+            return
+        elif face == 'Equator':
+            self.turn_equator(direction)
+            return
+        elif face == 'Slice':
+            self.turn_slice(direction)
+            return
+        
         # Misinput validation
         if face not in ['Up', 'Down', 'Left', 'Right', 'Front', 'Back']:
             raise ValueError("Invalid face name")
@@ -143,5 +154,5 @@ class Cube:
 
 x = Cube()
 print(x)
-x.turn('Up', 'clockwise')
+x.turn('Down', 'counterclockwise')
 print(x)
