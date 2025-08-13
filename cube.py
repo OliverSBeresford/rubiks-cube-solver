@@ -62,7 +62,7 @@ class Cube:
 
         # Set object attributes
         for face in dictionary:
-            self.__setattr__(face, dictionary[face])
+            self.__setattr__(face, np.array(dictionary[face]))
         self.side_length = side_length
     
     def __str__(self):
