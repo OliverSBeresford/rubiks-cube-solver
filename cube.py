@@ -9,7 +9,7 @@ class Cube:
     # The slice notation is used to indicate which rows/columns are affected.
     allItems = slice(0, None)
     all_adjacent_faces = {
-        'Up': OrderedDict({
+        'Up': OrderedDict({ # Note: OrderedDict is only needed for Python < 3.7
             'Left': (0, allItems),
             'Back': (0, allItems),
             'Right': (0, allItems),
