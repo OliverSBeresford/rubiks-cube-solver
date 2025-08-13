@@ -112,9 +112,6 @@ class Cube:
         :param face: 'Up', 'Down', 'Left', 'Right', 'Front', or 'Back'
         :param direction: 'clockwise' or 'counterclockwise'
         """
-        # Implement the logic to turn the cube's face
-        # This is a placeholder for the actual implementation
-        print(f"Turning {face} {direction}")
         
         # Misinput validation
         if face not in ['Up', 'Down', 'Left', 'Right', 'Front', 'Back']:
