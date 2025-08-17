@@ -47,6 +47,18 @@ class Cube:
         })
     }
     
+    TRANSLATE = {
+        'U': 'Up',
+        'D': 'Down',
+        'L': 'Left',
+        'R': 'Right',
+        'F': 'Front',
+        'B': 'Back',
+        'M': 'Middle',
+        'E': 'Equator',
+        'S': 'Slice'
+    }
+    
     def __init__(self, dictionary: dict=None, side_length: int=None):
         if dictionary is None:
             # Solved rubik's Cube representation
@@ -248,9 +260,32 @@ class Cube:
         if repeat > 1:
             # Repeat the turn for the specified number of times
             self.turn_slice(direction, repeat - 1)
+            
+    def run_turns(self, turns: str):
+        """
+        Runs a series of turns on the cube.
+        :param turns: A string of turns in the format "U U' R R' S etc..."
+        """
+        turns = turns.upper().split()
+        for turn in turns:
+            print(f"Processing turn: {turn}")
+            
+            # Translate letters to full turn / face names
+            move = Cube.TRANSLATE[turn[0]]
+            
+            # Direction is counterclockwise if the second character is a single quote (')
+            direction = 'clockwise' if len(turn) == 1 or turn[1] != '\'' else 'counterclockwise'
+            
+            # Repeat is 1 if no number is specified, otherwise it's the integer after the face letter
+            repeat = 1 if len(turn) == 1 or turn[1] == '\'' else int(turn[1])
+            
+            # Perform the turn
+            self.turn(move, direction, repeat)
+            
+            print(self)
         
 
 x = Cube()
 print(x)
-x.turn('Up', 'clockwise')
+x.run_turns("M2 E2 S2")
 print(x)
