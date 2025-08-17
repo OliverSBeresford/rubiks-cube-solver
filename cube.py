@@ -63,12 +63,12 @@ class Cube:
         if dictionary is None:
             # Solved rubik's Cube representation
             dictionary = {
-                'Up': [['W','W','W'],['W','W','W'],['W','W','W']],
+                'Down': [['W','W','W'],['W','W','W'],['W','W','W']],
                 'Right': [['R','R','R'],['R','R','R'],['R','R','R']],
-                'Front': [['G','G','G'],['G','G','G'],['G','G','G']],
-                'Down': [['Y','Y','Y'],['Y','Y','Y'],['Y','Y','Y']],
+                'Back': [['G','G','G'],['G','G','G'],['G','G','G']],
+                'Up': [['Y','Y','Y'],['Y','Y','Y'],['Y','Y','Y']],
                 'Left': [['O','O','O'],['O','O','O'],['O','O','O']],
-                'Back': [['B','B','B'],['B','B','B'],['B','B','B']]
+                'Front': [['B','B','B'],['B','B','B'],['B','B','B']]
             }
             # Default side length
             side_length = 3
