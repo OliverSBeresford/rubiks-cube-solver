@@ -155,19 +155,32 @@ class Cube:
         """
         Turns the middle slice of the cube in the given direction.
         :param direction: 'clockwise' or 'counterclockwise'
+        
+        This assumes the perspective is facing the Left face
         """
         # Middle slice is a special case, it affects both Up and Down faces
         if direction not in ['clockwise', 'counterclockwise']:
             raise ValueError("Invalid direction")
-        
-        direction_sign = -1 if direction == 'clockwise' else 1
-        
     
-        # Rotate the middle rows of Left, Front, Right, and Back faces
+        # Rotate the middle rows of Up, Front, Down, and Back faces
+        if direction == 'clockwise':
+            # Rotate Up, Front, Down, and Back faces
+            temp = self.Up[:, 1].copy()
+            self.Up[:, 1] = self.Back[:, 1]
+            self.Back[:, 1] = self.Down[:, 1]
+            self.Down[:, 1] = self.Front[:, 1]
+            self.Front[:, 1] = temp
+        else:
+            # Rotate Up, Front, Down, and Back faces in the opposite direction
+            temp = self.Up[:, 1].copy()
+            self.Up[:, 1] = self.Front[:, 1]
+            self.Front[:, 1] = self.Down[:, 1]
+            self.Down[:, 1] = self.Back[:, 1]
+            self.Back[:, 1] = temp
         
         
 
 x = Cube()
 print(x)
-x.turn('Down', 'counterclockwise')
+x.turn('Middle', 'counterclockwise')
 print(x)
