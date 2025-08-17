@@ -154,6 +154,7 @@ class Cube:
     def turn_middle(self, direction):
         """
         Turns the middle slice of the cube in the given direction.
+        (The slice in between the Left and Right faces)
         :param direction: 'clockwise' or 'counterclockwise'
         
         This assumes the perspective is facing the Left face
@@ -181,6 +182,7 @@ class Cube:
     def turn_equator(self, direction):
         """
         Turns the equator slice of the cube in the given direction.
+        (The slice in between the Up and Down faces)
         :param direction: 'clockwise' or 'counterclockwise'
         
         This assumes the perspective is facing the Bottom face
@@ -207,6 +209,7 @@ class Cube:
     def turn_slice(self, direction):
         """
         Turns the slice of the cube in the given direction.
+        (The slice in between the Front and Back faces)
         :param direction: 'clockwise' or 'counterclockwise'
         
         This assumes the perspective is facing the Front face
