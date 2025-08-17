@@ -103,6 +103,13 @@ class Cube:
     }
     
     def __init__(self, dictionary: dict=None, side_length: int=None):
+        """
+        Initializes a Cube object. If no dictionary is provided, creates a solved 3x3 cube.
+
+        Args:
+            dictionary (dict, optional): Dictionary mapping face names to 2D lists of stickers.
+            side_length (int, optional): The length of one side of the cube. Defaults to 3.
+        """
         if dictionary is None:
             # Solved rubik's Cube representation
             dictionary = {
@@ -123,7 +130,10 @@ class Cube:
     
     def __str__(self):
         """
-        Prints unfolded cube (net) in a human-readable format with colors.
+        Returns a string representation of the unfolded cube (net) in a human-readable format with colors.
+
+        Returns:
+            str: The unfolded cube as a colored string.
         """
 
         # ANSI color codes for each sticker color
@@ -164,8 +174,11 @@ class Cube:
     def turn(self, face: str, direction: str, repeat: int = 1):
         """
         Turns the specified face in the given direction.
-        :param face: 'Up', 'Down', 'Left', 'Right', 'Front', or 'Back'
-        :param direction: 'clockwise' or 'counterclockwise'
+
+        Args:
+            face (str): One of 'Up', 'Down', 'Left', 'Right', 'Front', or 'Back'.
+            direction (str): Either 'clockwise' or 'counterclockwise'.
+            repeat (int, optional): Number of times to repeat the turn. Defaults to 1.
         """
         
         # Handle special cases for middle, equator, and slice turns
@@ -201,11 +214,14 @@ class Cube:
         
     def turn_middle(self, direction: str, repeat: int = 1):
         """
-        Turns the middle slice of the cube in the given direction.
-        (The slice in between the Left and Right faces)
-        :param direction: 'clockwise' or 'counterclockwise'
-        
-        This assumes the perspective is facing the Left face
+        Turns the middle slice of the cube in the given direction (the slice in between the Left and Right faces).
+
+        Args:
+            direction (str): Either 'clockwise' or 'counterclockwise'.
+            repeat (int, optional): Number of times to repeat the turn. Defaults to 1.
+
+        Note:
+            This assumes the perspective is facing the Left face.
         """
         # Middle slice is a special case, it affects both Up and Down faces
         if direction not in ['clockwise', 'counterclockwise']:
@@ -233,11 +249,14 @@ class Cube:
     
     def turn_equator(self, direction: str, repeat: int = 1):
         """
-        Turns the equator slice of the cube in the given direction.
-        (The slice in between the Up and Down faces)
-        :param direction: 'clockwise' or 'counterclockwise'
-        
-        This assumes the perspective is facing the Bottom face
+        Turns the equator slice of the cube in the given direction (the slice in between the Up and Down faces).
+
+        Args:
+            direction (str): Either 'clockwise' or 'counterclockwise'.
+            repeat (int, optional): Number of times to repeat the turn. Defaults to 1.
+
+        Note:
+            This assumes the perspective is facing the Bottom face.
         """
         if direction not in ['clockwise', 'counterclockwise']:
             raise ValueError("Invalid direction")
@@ -264,11 +283,14 @@ class Cube:
             
     def turn_slice(self, direction: str, repeat: int = 1):
         """
-        Turns the slice of the cube in the given direction.
-        (The slice in between the Front and Back faces)
-        :param direction: 'clockwise' or 'counterclockwise'
-        
-        This assumes the perspective is facing the Front face
+        Turns the slice of the cube in the given direction (the slice in between the Front and Back faces).
+
+        Args:
+            direction (str): Either 'clockwise' or 'counterclockwise'.
+            repeat (int, optional): Number of times to repeat the turn. Defaults to 1.
+
+        Note:
+            This assumes the perspective is facing the Front face.
         """
         if direction not in ['clockwise', 'counterclockwise']:
             raise ValueError("Invalid direction")
@@ -294,13 +316,17 @@ class Cube:
             self.turn_slice(direction, repeat - 1)
 
     def get_line(self, face: str, index: int, row_or_col: str, reverse: bool = False):
-        """Gets a row or column from a face.
-        
-        :param face: Face name ('Up', 'Down', 'Left', 'Right', 'Front', 'Back')
-        :param index: Index of the row or column (0, 1, or 2 for a 3x3 cube)
-        :param row_or_col: 'row' or 'col'
-        :param reverse: If True, reverses the line
-        :return: Numpy array of the requested row or column
+        """
+        Gets a row or column from a face.
+
+        Args:
+            face (str): Face name ('Up', 'Down', 'Left', 'Right', 'Front', 'Back').
+            index (int): Index of the row or column (0, 1, or 2 for a 3x3 cube).
+            row_or_col (str): 'row' or 'col'.
+            reverse (bool, optional): If True, reverses the line. Defaults to False.
+
+        Returns:
+            numpy.ndarray: The requested row or column.
         """
         # Get line from the specified face
         if row_or_col == 'row':
@@ -316,17 +342,15 @@ class Cube:
         return line
         
 
-    def set_line(self, face: str, index: int, row_or_col: int, values: np.ndarray):
-        """Sets a row or column from a face.
-        
+    def set_line(self, face: str, index: int, row_or_col: str, values: np.ndarray):
+        """
+        Sets a row or column of a face.
+
         Args:
-            face (str): Face name ('Up', 'Down', 'Left', 'Right', 'Front', 'Back')
-            index (int): Index of the row or column (0, 1, or 2 for a 3x3 cube)
-            row_or_col (str): 'row' or 'col'
-            values (np.ndarray): Numpy array of values to set
-            
-        Returns:
-            Numpy array of the requested row or column
+            face (str): Face name ('Up', 'Down', 'Left', 'Right', 'Front', 'Back').
+            index (int): Index of the row or column (0, 1, or 2 for a 3x3 cube).
+            row_or_col (str): 'row' or 'col'.
+            values (numpy.ndarray): Numpy array of values to set.
         """
         if row_or_col == 'row':
             getattr(self, face)[index, :] = values.copy()
@@ -338,7 +362,11 @@ class Cube:
 
     def rotate_stickers(self, rotating_face: str, direction: str):
         """
-        Transfer stickers between faces according to the mapping for a given face and direction.
+        Transfers stickers between faces according to the mapping for a given face and direction.
+
+        Args:
+            rotating_face (str): The face being turned.
+            direction (str): Either 'clockwise' or 'counterclockwise'.
         """
         steps = Cube.TURN_MAPPINGS.get((rotating_face, direction))
         if not steps:
@@ -364,7 +392,10 @@ class Cube:
     def run_turns(self, turns: str, debug: bool = False):
         """
         Runs a series of turns on the cube.
-        :param turns: A string of turns in the format "U U' R R' S etc..."
+
+        Args:
+            turns (str): A string of turns in the format "U U' R R' S etc...".
+            debug (bool, optional): If True, prints debug information. Defaults to False.
         """
         turns = turns.upper().split()
         for turn in turns:
