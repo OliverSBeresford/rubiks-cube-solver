@@ -106,7 +106,7 @@ class Cube:
             s += "      " + row_str(row) + "\n"
         return s
     
-    def turn(self, face: str, direction: str):
+    def turn(self, face: str, direction: str, repeat: int = 1):
         """
         Turns the specified face in the given direction.
         :param face: 'Up', 'Down', 'Left', 'Right', 'Front', or 'Back'
@@ -115,13 +115,13 @@ class Cube:
         
         # Handle special cases for middle, equator, and slice turns
         if face == 'Middle':
-            self.turn_middle(direction)
+            self.turn_middle(direction, repeat)
             return
         elif face == 'Equator':
-            self.turn_equator(direction)
+            self.turn_equator(direction, repeat)
             return
         elif face == 'Slice':
-            self.turn_slice(direction)
+            self.turn_slice(direction, repeat)
             return
         
         # Misinput validation
@@ -151,7 +151,11 @@ class Cube:
         # Update the last face with the saved state (either above or below depending on direction)
         self.__getattribute__(selected_faces[-direction_sign])[selected_indices[-direction_sign]] = tempLeft
         
-    def turn_middle(self, direction: str):
+        if repeat > 1:
+            # Repeat the turn for the specified number of times
+            self.turn(face, direction, repeat - 1)
+        
+    def turn_middle(self, direction: str, repeat: int = 1):
         """
         Turns the middle slice of the cube in the given direction.
         (The slice in between the Left and Right faces)
@@ -178,8 +182,12 @@ class Cube:
             self.Front[:, 1] = self.Down[:, 1]
             self.Down[:, 1] = self.Back[:, 1]
             self.Back[:, 1] = temp
+        
+        if repeat > 1:
+            # Repeat the turn for the specified number of times
+            self.turn_middle(direction, repeat - 1)
     
-    def turn_equator(self, direction: str):
+    def turn_equator(self, direction: str, repeat: int = 1):
         """
         Turns the equator slice of the cube in the given direction.
         (The slice in between the Up and Down faces)
@@ -205,8 +213,12 @@ class Cube:
             self.Front[1, :] = self.Right[1, :]
             self.Right[1, :] = self.Back[1, :]
             self.Back[1, :] = temp
+        
+        if repeat > 1:
+            # Repeat the turn for the specified number of times
+            self.turn_equator(direction, repeat - 1)
             
-    def turn_slice(self, direction: str):
+    def turn_slice(self, direction: str, repeat: int = 1):
         """
         Turns the slice of the cube in the given direction.
         (The slice in between the Front and Back faces)
@@ -233,8 +245,14 @@ class Cube:
             self.Down[1, :] = self.Left[:, 1]
             self.Left[:, 1] = temp
         
+        if repeat > 1:
+            # Repeat the turn for the specified number of times
+            self.turn_slice(direction, repeat - 1)
+        
 
 x = Cube()
 print(x)
-x.turn('Slice', 'clockwise')
+x.turn('Middle', 'clockwise', 2)
+x.turn('Equator', 'clockwise', 2)
+x.turn('Slice', 'clockwise', 2)
 print(x)
