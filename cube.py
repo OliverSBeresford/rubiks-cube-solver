@@ -177,10 +177,35 @@ class Cube:
             self.Front[:, 1] = self.Down[:, 1]
             self.Down[:, 1] = self.Back[:, 1]
             self.Back[:, 1] = temp
+    
+    def turn_equator(self, direction):
+        """
+        Turns the equator slice of the cube in the given direction.
+        :param direction: 'clockwise' or 'counterclockwise'
         
+        This assumes the perspective is facing the Bottom face
+        """
+        if direction not in ['clockwise', 'counterclockwise']:
+            raise ValueError("Invalid direction")
+    
+        # Rotate the middle rows of Left, Front, Right, and Back faces
+        if direction == 'clockwise':
+            # Rotate Left, Front, Right, and Back faces
+            temp = self.Left[1, :].copy()
+            self.Left[1, :] = self.Back[1, :]
+            self.Back[1, :] = self.Right[1, :]
+            self.Right[1, :] = self.Front[1, :]
+            self.Front[1, :] = temp
+        else:
+            # Rotate Left, Front, Right, and Back faces in the opposite direction
+            temp = self.Left[1, :].copy()
+            self.Left[1, :] = self.Front[1, :]
+            self.Front[1, :] = self.Right[1, :]
+            self.Right[1, :] = self.Back[1, :]
+            self.Back[1, :] = temp
         
 
 x = Cube()
 print(x)
-x.turn('Middle', 'counterclockwise')
+x.turn('Equator', 'clockwise')
 print(x)
