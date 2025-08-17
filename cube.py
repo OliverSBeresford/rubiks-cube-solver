@@ -41,7 +41,7 @@ class Cube:
         }),
         'Back': OrderedDict({
             'Right': (ALL_ITEMS, 2),
-            'Up': (ALL_ITEMS, 2),
+            'Up': (0, ALL_ITEMS),
             'Left': (ALL_ITEMS, 0),
             'Down': (2, ALL_ITEMS)
         })
