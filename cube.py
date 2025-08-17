@@ -151,6 +151,21 @@ class Cube:
         # Update the last face with the saved state (either above or below depending on direction)
         self.__getattribute__(selected_faces[-direction_sign])[selected_indices[-direction_sign]] = tempLeft
         
+    def turn_middle(self, direction):
+        """
+        Turns the middle slice of the cube in the given direction.
+        :param direction: 'clockwise' or 'counterclockwise'
+        """
+        # Middle slice is a special case, it affects both Up and Down faces
+        if direction not in ['clockwise', 'counterclockwise']:
+            raise ValueError("Invalid direction")
+        
+        direction_sign = -1 if direction == 'clockwise' else 1
+        
+    
+        # Rotate the middle rows of Left, Front, Right, and Back faces
+        
+        
 
 x = Cube()
 print(x)
