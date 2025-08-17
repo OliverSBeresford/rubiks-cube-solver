@@ -2,51 +2,6 @@ import numpy as np
 from collections import OrderedDict
 
 class Cube:
-    # Adjacent rows/cols for each face, starting from the left and going clockwise
-    # This is used to determine which rows/cols to rotate when a face is turned
-    # For example, when turning the Up face clockwise, the Left, Back, Right,
-    # and Front faces will have their rows rotated accordingly.
-    # The slice notation is used to indicate which rows/columns are affected.
-    ALL_ITEMS = slice(0, None)
-    ALL_ADJACENT_FACES = {
-        'Up': OrderedDict({ # Note: OrderedDict is only needed for Python < 3.7
-            'Left': (0, ALL_ITEMS),
-            'Back': (0, ALL_ITEMS),
-            'Right': (0, ALL_ITEMS),
-            'Front': (0, ALL_ITEMS)
-        }),
-        'Down': OrderedDict({
-            'Left': (2, ALL_ITEMS),
-            'Front': (2, ALL_ITEMS),
-            'Right': (2, ALL_ITEMS),
-            'Back': (2, ALL_ITEMS)
-        }),
-        'Left': OrderedDict({
-            'Back': (ALL_ITEMS, 2),
-            'Up': (ALL_ITEMS, 0),
-            'Front': (ALL_ITEMS, 0),
-            'Down': (ALL_ITEMS, 0)
-        }),
-        'Right': OrderedDict({
-            'Front': (ALL_ITEMS, 2),
-            'Up': (ALL_ITEMS, 2),
-            'Back': (ALL_ITEMS, 0),
-            'Down': (ALL_ITEMS, 2)
-        }),
-        'Front': OrderedDict({
-            'Left': (ALL_ITEMS, 2),
-            'Up': (2, ALL_ITEMS),
-            'Right': (ALL_ITEMS, 0),
-            'Down': (0, ALL_ITEMS)
-        }),
-        'Back': OrderedDict({
-            'Right': (ALL_ITEMS, 2),
-            'Up': (0, ALL_ITEMS),
-            'Left': (ALL_ITEMS, 0),
-            'Down': (2, ALL_ITEMS)
-        })
-    }
-    
     TRANSLATE = {
         'U': 'Up',
         'D': 'Down',
@@ -57,6 +12,94 @@ class Cube:
         'M': 'Middle',
         'E': 'Equator',
         'S': 'Slice'
+    }
+    
+    # Mapping for adjacent faces when turning a face
+    # Each entry: (from_face, from_idx, from_type, to_face, to_idx, to_type, reverse)
+    TURN_MAPPINGS = {
+        # UP face
+        ('Up', 'clockwise'): [
+            ('Back', 0, 'row', 'Right', 0, 'row', False),
+            ('Right', 0, 'row', 'Front', 0, 'row', False),
+            ('Front', 0, 'row', 'Left', 0, 'row', False),
+            ('Left', 0, 'row', 'Back', 0, 'row', False),
+        ],
+        ('Up', 'counterclockwise'): [
+            ('Back', 0, 'row', 'Left', 0, 'row', False),
+            ('Left', 0, 'row', 'Front', 0, 'row', False),
+            ('Front', 0, 'row', 'Right', 0, 'row', False),
+            ('Right', 0, 'row', 'Back', 0, 'row', False),
+        ],
+
+        # DOWN face
+        ('Down', 'clockwise'): [
+            ('Front', 2, 'row', 'Right', 2, 'row', False),
+            ('Right', 2, 'row', 'Back', 2, 'row', False),
+            ('Back', 2, 'row', 'Left', 2, 'row', False),
+            ('Left', 2, 'row', 'Front', 2, 'row', False),
+        ],
+        ('Down', 'counterclockwise'): [
+            ('Front', 2, 'row', 'Left', 2, 'row', False),
+            ('Left', 2, 'row', 'Back', 2, 'row', False),
+            ('Back', 2, 'row', 'Right', 2, 'row', False),
+            ('Right', 2, 'row', 'Front', 2, 'row', False),
+        ],
+
+        # LEFT face
+        ('Left', 'clockwise'): [
+            ('Up', 0, 'col', 'Front', 0, 'col', False),
+            ('Front', 0, 'col', 'Down', 0, 'col', False),
+            ('Down', 0, 'col', 'Back', 2, 'col', True),
+            ('Back', 2, 'col', 'Up', 0, 'col', True),
+        ],
+        ('Left', 'counterclockwise'): [
+            ('Up', 0, 'col', 'Back', 2, 'col', True),
+            ('Back', 2, 'col', 'Down', 0, 'col', True),
+            ('Down', 0, 'col', 'Front', 0, 'col', False),
+            ('Front', 0, 'col', 'Up', 0, 'col', False),
+        ],
+
+        # RIGHT face
+        ('Right', 'clockwise'): [
+            ('Up', 2, 'col', 'Back', 0, 'col', True),
+            ('Back', 0, 'col', 'Down', 2, 'col', True),
+            ('Down', 2, 'col', 'Front', 2, 'col', False),
+            ('Front', 2, 'col', 'Up', 2, 'col', False),
+        ],
+        ('Right', 'counterclockwise'): [
+            ('Up', 2, 'col', 'Front', 2, 'col', False),
+            ('Front', 2, 'col', 'Down', 2, 'col', False),
+            ('Down', 2, 'col', 'Back', 0, 'col', True),
+            ('Back', 0, 'col', 'Up', 2, 'col', True),
+        ],
+
+        # FRONT face
+        ('Front', 'clockwise'): [
+            ('Up', 2, 'row', 'Right', 0, 'col', False),
+            ('Right', 0, 'col', 'Down', 0, 'row', True),
+            ('Down', 0, 'row', 'Left', 2, 'col', False),
+            ('Left', 2, 'col', 'Up', 2, 'row', True),
+        ],
+        ('Front', 'counterclockwise'): [
+            ('Up', 2, 'row', 'Left', 2, 'col', True),
+            ('Left', 2, 'col', 'Down', 0, 'row', False),
+            ('Down', 0, 'row', 'Right', 0, 'col', True),
+            ('Right', 0, 'col', 'Up', 2, 'row', False),
+        ],
+
+        # BACK face
+        ('Back', 'clockwise'): [
+            ('Up', 0, 'row', 'Left', 0, 'col', True),
+            ('Left', 0, 'col', 'Down', 2, 'row', False),
+            ('Down', 2, 'row', 'Right', 2, 'col', True),
+            ('Right', 2, 'col', 'Up', 0, 'row', False),
+        ],
+        ('Back', 'counterclockwise'): [
+            ('Up', 0, 'row', 'Right', 2, 'col', False),
+            ('Right', 2, 'col', 'Down', 2, 'row', True),
+            ('Down', 2, 'row', 'Left', 0, 'col', False),
+            ('Left', 0, 'col', 'Up', 0, 'row', True),
+        ]
     }
     
     def __init__(self, dictionary: dict=None, side_length: int=None):
@@ -148,25 +191,9 @@ class Cube:
         # Rotate the face
         self.__setattr__(face, np.rot90(self.__getattribute__(face), direction_sign))
         
-        # This is an ordered dictionary of adjacent faces with their respective row/col selectors
-        adjacent_faces = Cube.ALL_ADJACENT_FACES[face]
-        # Iterator for which faces are adjacent and which rows/cols to rotate
-        selected_faces = list(adjacent_faces.keys())
-        selected_indices = list(adjacent_faces.values())
-        
-        # Save the current state of the face to the left of the face being turned
-        tempLeft = self.__getattribute__(selected_faces[0])[selected_indices[0]].copy()
-        for i in range(direction_sign, len(selected_faces) * direction_sign, direction_sign):
-            # Rotate the rows/cols of the adjacent faces
-            source_face = selected_faces[i]
-            target_face = selected_faces[i - direction_sign]
-            source_indices = selected_indices[i]
-            target_indices = selected_indices[i - direction_sign]
-            
-            self.__getattribute__(target_face)[target_indices] = self.__getattribute__(source_face)[source_indices].copy()
-        
-        # Update the last face with the saved state (either above or below depending on direction)
-        self.__getattribute__(selected_faces[-direction_sign])[selected_indices[-direction_sign]] = tempLeft
+        # Rotate the stickers between adjacent faces
+        # This will transfer stickers between the affected faces according to the mapping
+        self.rotate_stickers(face, direction)
         
         if repeat > 1:
             # Repeat the turn for the specified number of times
@@ -188,16 +215,16 @@ class Cube:
         if direction == 'clockwise':
             # Rotate Up, Front, Down, and Back faces
             temp = self.Up[:, 1].copy()
-            self.Up[:, 1] = self.Back[:, 1]
-            self.Back[:, 1] = self.Down[:, 1]
+            self.Up[:, 1] = np.flip(self.Back[:, 1]) # Needs to be flipped
+            self.Back[:, 1] = np.flip(self.Down[:, 1]) # Needs to be flipped
             self.Down[:, 1] = self.Front[:, 1]
             self.Front[:, 1] = temp
         else:
             # Rotate Up, Front, Down, and Back faces in the opposite direction
-            temp = self.Up[:, 1].copy()
+            temp = np.flip(self.Up[:, 1].copy()) # Needs to be flipped
             self.Up[:, 1] = self.Front[:, 1]
             self.Front[:, 1] = self.Down[:, 1]
-            self.Down[:, 1] = self.Back[:, 1]
+            self.Down[:, 1] = np.flip(self.Back[:, 1]) # Needs to be flipped
             self.Back[:, 1] = temp
         
         if repeat > 1:
@@ -250,30 +277,99 @@ class Cube:
         if direction == 'clockwise':
             # Rotate Up, Left, Down, and Right faces
             temp = self.Up[1, :].copy()
-            self.Up[1, :] = self.Left[:, 1]
+            self.Up[1, :] = np.flip(self.Left[:, 1])
             self.Left[:, 1] = self.Down[1, :]
-            self.Down[1, :] = self.Right[:, 1]
+            self.Down[1, :] = np.flip(self.Right[:, 1])
             self.Right[:, 1] = temp
         else:
             # Rotate Up, Left, Down, and Right faces in the opposite direction
-            temp = self.Up[1, :].copy()
+            temp = np.flip(self.Up[1, :].copy())
             self.Up[1, :] = self.Right[:, 1]
-            self.Right[:, 1] = self.Down[1, :]
+            self.Right[:, 1] = np.flip(self.Down[1, :])
             self.Down[1, :] = self.Left[:, 1]
             self.Left[:, 1] = temp
         
         if repeat > 1:
             # Repeat the turn for the specified number of times
             self.turn_slice(direction, repeat - 1)
+
+    def get_line(self, face: str, index: int, row_or_col: str, reverse: bool = False):
+        """Gets a row or column from a face.
+        
+        :param face: Face name ('Up', 'Down', 'Left', 'Right', 'Front', 'Back')
+        :param index: Index of the row or column (0, 1, or 2 for a 3x3 cube)
+        :param row_or_col: 'row' or 'col'
+        :param reverse: If True, reverses the line
+        :return: Numpy array of the requested row or column
+        """
+        # Get line from the specified face
+        if row_or_col == 'row':
+            line = getattr(self, face)[index, :].copy()
+        elif row_or_col == 'col':
+            line = getattr(self, face)[:, index].copy()
+        else:
+            raise ValueError("Invalid type, must be 'row' or 'col'")
+        
+        # Reverse the line if needed
+        if reverse:
+            line = np.flip(line)
+        return line
+        
+
+    def set_line(self, face: str, index: int, row_or_col: int, values: np.ndarray):
+        """Sets a row or column from a face.
+        
+        Args:
+            face (str): Face name ('Up', 'Down', 'Left', 'Right', 'Front', 'Back')
+            index (int): Index of the row or column (0, 1, or 2 for a 3x3 cube)
+            row_or_col (str): 'row' or 'col'
+            values (np.ndarray): Numpy array of values to set
             
-    def run_turns(self, turns: str):
+        Returns:
+            Numpy array of the requested row or column
+        """
+        if row_or_col == 'row':
+            getattr(self, face)[index, :] = values.copy()
+        elif row_or_col == 'col':
+            getattr(self, face)[:, index] = values.copy()
+        else:
+            raise ValueError("Invalid type, must be 'row' or 'col'")
+        
+
+    def rotate_stickers(self, rotating_face: str, direction: str):
+        """
+        Transfer stickers between faces according to the mapping for a given face and direction.
+        """
+        steps = Cube.TURN_MAPPINGS.get((rotating_face, direction))
+        if not steps:
+            raise ValueError(f"No mapping for {rotating_face} {direction}")
+        
+        # Get the stickers from the first source face
+        last_step = steps[0]
+        temp_line = self.get_line(face=last_step[0], index=last_step[1], row_or_col=last_step[2], reverse=last_step[6])
+        
+        for source_face, source_idx, source_type, target_face, target_idx, target_type, reverse in steps[-1:0:-1]:
+            # Get the stickers from the source face
+            stickers = self.get_line(face=source_face, index=source_idx, row_or_col=source_type, reverse=reverse)
+            
+            # Set the stickers to the target face
+            self.set_line(face=target_face, index=target_idx, row_or_col=target_type, values=stickers)
+            
+        # Set the stickers from the first source face to the last target face
+        first_step = steps[0]
+        self.set_line(face=first_step[3], index=first_step[4], row_or_col=first_step[5], values=temp_line)
+        
+        
+
+    def run_turns(self, turns: str, debug: bool = False):
         """
         Runs a series of turns on the cube.
         :param turns: A string of turns in the format "U U' R R' S etc..."
         """
         turns = turns.upper().split()
         for turn in turns:
-            print(f"Processing turn: {turn}")
+            if debug:
+                print(f"Processing turn: {turn} or {Cube.TRANSLATE[turn[0]]}")
             
             # Translate letters to full turn / face names
             move = Cube.TRANSLATE[turn[0]]
@@ -292,5 +388,5 @@ class Cube:
 
 x = Cube()
 print(x)
-x.run_turns("M2 E2 S2")
+x.run_turns("U B2 R2 B2 L2 F2 R2 D' F2 L2 B F' L F2 D U' R2 F' L' R'")
 print(x)
