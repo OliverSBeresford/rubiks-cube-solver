@@ -158,7 +158,12 @@ class Cube:
         tempLeft = self.__getattribute__(selected_faces[0])[selected_indices[0]].copy()
         for i in range(direction_sign, len(selected_faces) * direction_sign, direction_sign):
             # Rotate the rows/cols of the adjacent faces
-            self.__getattribute__(selected_faces[i - direction_sign])[selected_indices[i - direction_sign]] = self.__getattribute__(selected_faces[i])[selected_indices[i]].copy()
+            source_face = selected_faces[i]
+            target_face = selected_faces[i - direction_sign]
+            source_indices = selected_indices[i]
+            target_indices = selected_indices[i - direction_sign]
+            
+            self.__getattribute__(target_face)[target_indices] = self.__getattribute__(source_face)[source_indices].copy()
         
         # Update the last face with the saved state (either above or below depending on direction)
         self.__getattribute__(selected_faces[-direction_sign])[selected_indices[-direction_sign]] = tempLeft
