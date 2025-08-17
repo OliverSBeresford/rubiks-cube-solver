@@ -7,43 +7,43 @@ class Cube:
     # For example, when turning the Up face clockwise, the Left, Back, Right,
     # and Front faces will have their rows rotated accordingly.
     # The slice notation is used to indicate which rows/columns are affected.
-    allItems = slice(0, None)
-    all_adjacent_faces = {
+    ALL_ITEMS = slice(0, None)
+    ALL_ADJACENT_FACES = {
         'Up': OrderedDict({ # Note: OrderedDict is only needed for Python < 3.7
-            'Left': (0, allItems),
-            'Back': (0, allItems),
-            'Right': (0, allItems),
-            'Front': (0, allItems)
+            'Left': (0, ALL_ITEMS),
+            'Back': (0, ALL_ITEMS),
+            'Right': (0, ALL_ITEMS),
+            'Front': (0, ALL_ITEMS)
         }),
         'Down': OrderedDict({
-            'Left': (2, allItems),
-            'Front': (2, allItems),
-            'Right': (2, allItems),
-            'Back': (2, allItems)
+            'Left': (2, ALL_ITEMS),
+            'Front': (2, ALL_ITEMS),
+            'Right': (2, ALL_ITEMS),
+            'Back': (2, ALL_ITEMS)
         }),
         'Left': OrderedDict({
-            'Back': (allItems, 2),
-            'Up': (allItems, 0),
-            'Front': (allItems, 0),
-            'Down': (allItems, 0)
+            'Back': (ALL_ITEMS, 2),
+            'Up': (ALL_ITEMS, 0),
+            'Front': (ALL_ITEMS, 0),
+            'Down': (ALL_ITEMS, 0)
         }),
         'Right': OrderedDict({
-            'Front': (allItems, 2),
-            'Up': (allItems, 2),
-            'Back': (allItems, 0),
-            'Down': (allItems, 2)
+            'Front': (ALL_ITEMS, 2),
+            'Up': (ALL_ITEMS, 2),
+            'Back': (ALL_ITEMS, 0),
+            'Down': (ALL_ITEMS, 2)
         }),
         'Front': OrderedDict({
-            'Left': (allItems, 2),
-            'Up': (2, allItems),
-            'Right': (allItems, 0),
-            'Down': (0, allItems)
+            'Left': (ALL_ITEMS, 2),
+            'Up': (2, ALL_ITEMS),
+            'Right': (ALL_ITEMS, 0),
+            'Down': (0, ALL_ITEMS)
         }),
         'Back': OrderedDict({
-            'Right': (allItems, 2),
-            'Up': (allItems, 2),
-            'Left': (allItems, 0),
-            'Down': (2, allItems)
+            'Right': (ALL_ITEMS, 2),
+            'Up': (ALL_ITEMS, 2),
+            'Left': (ALL_ITEMS, 0),
+            'Down': (2, ALL_ITEMS)
         })
     }
     
@@ -137,7 +137,7 @@ class Cube:
         self.__setattr__(face, np.rot90(self.__getattribute__(face), direction_sign))
         
         # This is an ordered dictionary of adjacent faces with their respective row/col selectors
-        adjacent_faces = Cube.all_adjacent_faces[face]
+        adjacent_faces = Cube.ALL_ADJACENT_FACES[face]
         # Iterator for which faces are adjacent and which rows/cols to rotate
         selected_faces = list(adjacent_faces.keys())
         selected_indices = list(adjacent_faces.values())
@@ -252,7 +252,5 @@ class Cube:
 
 x = Cube()
 print(x)
-x.turn('Middle', 'clockwise', 2)
-x.turn('Equator', 'clockwise', 2)
-x.turn('Slice', 'clockwise', 2)
+x.turn('Up', 'clockwise')
 print(x)
