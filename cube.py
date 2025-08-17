@@ -47,10 +47,10 @@ class Cube:
         })
     }
     
-    def __init__(self, dictionary=None, side_length=None):
+    def __init__(self, dictionary: dict=None, side_length: int=None):
         if dictionary is None:
             # Solved rubik's Cube representation
-            dictionary ={
+            dictionary = {
                 'Up': [['W','W','W'],['W','W','W'],['W','W','W']],
                 'Right': [['R','R','R'],['R','R','R'],['R','R','R']],
                 'Front': [['G','G','G'],['G','G','G'],['G','G','G']],
@@ -106,7 +106,7 @@ class Cube:
             s += "      " + row_str(row) + "\n"
         return s
     
-    def turn(self, face, direction):
+    def turn(self, face: str, direction: str):
         """
         Turns the specified face in the given direction.
         :param face: 'Up', 'Down', 'Left', 'Right', 'Front', or 'Back'
@@ -151,7 +151,7 @@ class Cube:
         # Update the last face with the saved state (either above or below depending on direction)
         self.__getattribute__(selected_faces[-direction_sign])[selected_indices[-direction_sign]] = tempLeft
         
-    def turn_middle(self, direction):
+    def turn_middle(self, direction: str):
         """
         Turns the middle slice of the cube in the given direction.
         (The slice in between the Left and Right faces)
@@ -179,7 +179,7 @@ class Cube:
             self.Down[:, 1] = self.Back[:, 1]
             self.Back[:, 1] = temp
     
-    def turn_equator(self, direction):
+    def turn_equator(self, direction: str):
         """
         Turns the equator slice of the cube in the given direction.
         (The slice in between the Up and Down faces)
@@ -206,7 +206,7 @@ class Cube:
             self.Right[1, :] = self.Back[1, :]
             self.Back[1, :] = temp
             
-    def turn_slice(self, direction):
+    def turn_slice(self, direction: str):
         """
         Turns the slice of the cube in the given direction.
         (The slice in between the Front and Back faces)
