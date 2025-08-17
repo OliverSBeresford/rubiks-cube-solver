@@ -203,9 +203,35 @@ class Cube:
             self.Front[1, :] = self.Right[1, :]
             self.Right[1, :] = self.Back[1, :]
             self.Back[1, :] = temp
+            
+    def turn_slice(self, direction):
+        """
+        Turns the slice of the cube in the given direction.
+        :param direction: 'clockwise' or 'counterclockwise'
+        
+        This assumes the perspective is facing the Front face
+        """
+        if direction not in ['clockwise', 'counterclockwise']:
+            raise ValueError("Invalid direction")
+    
+        # Rotate the middle rows of Up, Left, Down, and Right faces
+        if direction == 'clockwise':
+            # Rotate Up, Left, Down, and Right faces
+            temp = self.Up[1, :].copy()
+            self.Up[1, :] = self.Left[:, 1]
+            self.Left[:, 1] = self.Down[1, :]
+            self.Down[1, :] = self.Right[:, 1]
+            self.Right[:, 1] = temp
+        else:
+            # Rotate Up, Left, Down, and Right faces in the opposite direction
+            temp = self.Up[1, :].copy()
+            self.Up[1, :] = self.Right[:, 1]
+            self.Right[:, 1] = self.Down[1, :]
+            self.Down[1, :] = self.Left[:, 1]
+            self.Left[:, 1] = temp
         
 
 x = Cube()
 print(x)
-x.turn('Equator', 'clockwise')
+x.turn('Slice', 'clockwise')
 print(x)
