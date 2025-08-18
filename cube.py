@@ -413,7 +413,8 @@ class Cube:
             # Perform the turn
             self.turn(move, direction, repeat)
             
-            print(self)
+            if debug:
+                print(self)
         
 
 x = Cube()
