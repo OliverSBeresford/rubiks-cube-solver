@@ -17,88 +17,88 @@ class Cube:
     # Each entry: (from_face, from_idx, from_type, to_face, to_idx, to_type, reverse)
     TURN_MAPPINGS = {
         # UP face
-        ('Up', 'clockwise'): [
+        ('Up', 'clockwise'): (
             ('Back', 0, 'row', 'Right', 0, 'row', False),
             ('Right', 0, 'row', 'Front', 0, 'row', False),
             ('Front', 0, 'row', 'Left', 0, 'row', False),
             ('Left', 0, 'row', 'Back', 0, 'row', False),
-        ],
-        ('Up', 'counterclockwise'): [
+        ),
+        ('Up', 'counterclockwise'): (
             ('Back', 0, 'row', 'Left', 0, 'row', False),
             ('Left', 0, 'row', 'Front', 0, 'row', False),
             ('Front', 0, 'row', 'Right', 0, 'row', False),
             ('Right', 0, 'row', 'Back', 0, 'row', False),
-        ],
+        ),
 
         # DOWN face
-        ('Down', 'clockwise'): [
+        ('Down', 'clockwise'): (
             ('Front', 2, 'row', 'Right', 2, 'row', False),
             ('Right', 2, 'row', 'Back', 2, 'row', False),
             ('Back', 2, 'row', 'Left', 2, 'row', False),
             ('Left', 2, 'row', 'Front', 2, 'row', False),
-        ],
-        ('Down', 'counterclockwise'): [
+        ),
+        ('Down', 'counterclockwise'): (
             ('Front', 2, 'row', 'Left', 2, 'row', False),
             ('Left', 2, 'row', 'Back', 2, 'row', False),
             ('Back', 2, 'row', 'Right', 2, 'row', False),
             ('Right', 2, 'row', 'Front', 2, 'row', False),
-        ],
+        ),
 
         # LEFT face
-        ('Left', 'clockwise'): [
+        ('Left', 'clockwise'): (
             ('Up', 0, 'col', 'Front', 0, 'col', False),
             ('Front', 0, 'col', 'Down', 0, 'col', False),
             ('Down', 0, 'col', 'Back', 2, 'col', True),
             ('Back', 2, 'col', 'Up', 0, 'col', True),
-        ],
-        ('Left', 'counterclockwise'): [
+        ),
+        ('Left', 'counterclockwise'): (
             ('Up', 0, 'col', 'Back', 2, 'col', True),
             ('Back', 2, 'col', 'Down', 0, 'col', True),
             ('Down', 0, 'col', 'Front', 0, 'col', False),
             ('Front', 0, 'col', 'Up', 0, 'col', False),
-        ],
+        ),
 
         # RIGHT face
-        ('Right', 'clockwise'): [
+        ('Right', 'clockwise'): (
             ('Up', 2, 'col', 'Back', 0, 'col', True),
             ('Back', 0, 'col', 'Down', 2, 'col', True),
             ('Down', 2, 'col', 'Front', 2, 'col', False),
             ('Front', 2, 'col', 'Up', 2, 'col', False),
-        ],
-        ('Right', 'counterclockwise'): [
+        ),
+        ('Right', 'counterclockwise'): (
             ('Up', 2, 'col', 'Front', 2, 'col', False),
             ('Front', 2, 'col', 'Down', 2, 'col', False),
             ('Down', 2, 'col', 'Back', 0, 'col', True),
             ('Back', 0, 'col', 'Up', 2, 'col', True),
-        ],
+        ),
 
         # FRONT face
-        ('Front', 'clockwise'): [
+        ('Front', 'clockwise'): (
             ('Up', 2, 'row', 'Right', 0, 'col', False),
             ('Right', 0, 'col', 'Down', 0, 'row', True),
             ('Down', 0, 'row', 'Left', 2, 'col', False),
             ('Left', 2, 'col', 'Up', 2, 'row', True),
-        ],
-        ('Front', 'counterclockwise'): [
+        ),
+        ('Front', 'counterclockwise'): (
             ('Up', 2, 'row', 'Left', 2, 'col', True),
             ('Left', 2, 'col', 'Down', 0, 'row', False),
             ('Down', 0, 'row', 'Right', 0, 'col', True),
             ('Right', 0, 'col', 'Up', 2, 'row', False),
-        ],
+        ),
 
         # BACK face
-        ('Back', 'clockwise'): [
+        ('Back', 'clockwise'): (
             ('Up', 0, 'row', 'Left', 0, 'col', True),
             ('Left', 0, 'col', 'Down', 2, 'row', False),
             ('Down', 2, 'row', 'Right', 2, 'col', True),
             ('Right', 2, 'col', 'Up', 0, 'row', False),
-        ],
-        ('Back', 'counterclockwise'): [
+        ),
+        ('Back', 'counterclockwise'): (
             ('Up', 0, 'row', 'Right', 2, 'col', False),
             ('Right', 2, 'col', 'Down', 2, 'row', True),
             ('Down', 2, 'row', 'Left', 0, 'col', False),
             ('Left', 0, 'col', 'Up', 0, 'row', True),
-        ]
+        )
     }
     
     def __init__(self, dictionary: dict=None, side_length: int=None):
