@@ -28,7 +28,7 @@ class RubiksCube3DDisplay:
             elev (float): Elevation angle in the z plane.
             azim (float): Azimuth angle in the x,y plane.
         """
-        fig = plt.figure(figsize=(9, 9))
+        fig = plt.figure(figsize=(7, 7))
         ax = fig.add_subplot(111, projection='3d')
         ax.set_box_aspect([1,1,1])
 
