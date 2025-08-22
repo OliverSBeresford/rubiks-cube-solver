@@ -53,12 +53,13 @@ class RubiksCube3DDisplay:
                     # Calculate the 4 corners of the sticker (rectangle)
                     corners = []
                     for du, dv in [(0,0), (1,0), (1,1), (0,1)]:
-                        x = origin[0] + u_vec[0]*(i+du) + v_vec[0]*(j+dv)
-                        y = origin[1] + u_vec[1]*(i+du) + v_vec[1]*(j+dv)
-                        z = origin[2] + u_vec[2]*(i+du) + v_vec[2]*(j+dv)
+                        x = origin[0] + u_vec[0]*(j+du) + v_vec[0]*(i+dv)
+                        y = origin[1] + u_vec[1]*(j+du) + v_vec[1]*(i+dv)
+                        z = origin[2] + u_vec[2]*(j+du) + v_vec[2]*(i+dv)
                         corners.append([x, y, z])
                     color = STICKER_COLORS.get(face[i, j], 'gray')
                     poly = Poly3DCollection([corners])
+                    print(corners, color)
                     poly.set_facecolor(color)
                     poly.set_edgecolor('black')
                     ax.add_collection3d(poly)
