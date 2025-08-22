@@ -416,8 +416,3 @@ class Cube:
             if debug:
                 print(self)
         
-
-x = Cube()
-print(x)
-x.run_turns("U B2 R2 B2 L2 F2 R2 D' F2 L2 B F' L F2 D U' R2 F' L' R'")
-print(x)
