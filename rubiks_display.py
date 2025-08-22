@@ -59,7 +59,6 @@ class RubiksCube3DDisplay:
                         corners.append([x, y, z])
                     color = STICKER_COLORS.get(face[i, j], 'gray')
                     poly = Poly3DCollection([corners])
-                    print(corners, color)
                     poly.set_facecolor(color)
                     poly.set_edgecolor('black')
                     ax.add_collection3d(poly)
