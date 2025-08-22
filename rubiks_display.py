@@ -36,15 +36,14 @@ class RubiksCube3DDisplay:
         ax.set_axis_off()
 
         # Each face: (name, origin, u vector, v vector)
-        # All faces are defined so that (i, j) runs over the 3x3 grid in the correct orientation
         faces = [
             # name,      origin,         u_vec,         v_vec
-            ('Front',  (0, 0, 3), (1, 0, 0), (0, 0, -1)),  # z=2
-            ('Back',   (3, 3, 3), (-1, 0, 0), (0, 0, -1)), # z=0, mirrored x
-            ('Up',     (0, 3, 3), (1, 0, 0), (0, -1, 0)), # y=2, z decreases
-            ('Down',   (0, 0, 0), (1, 0, 0), (0, 1, 0)),  # y=0, z increases
-            ('Left',   (0, 3, 3), (0, -1, 0), (0, 0, -1)),  # x=0
-            ('Right',  (3, 0, 3), (0, 1, 0), (0, 0, -1)), # x=2, z decreases
+            ('Front',  (0, 0, 3), (1, 0, 0), (0, 0, -1)),
+            ('Back',   (3, 3, 3), (-1, 0, 0), (0, 0, -1)),
+            ('Up',     (0, 3, 3), (1, 0, 0), (0, -1, 0)),
+            ('Down',   (0, 0, 0), (1, 0, 0), (0, 1, 0)),
+            ('Left',   (0, 3, 3), (0, -1, 0), (0, 0, -1)),
+            ('Right',  (3, 0, 3), (0, 1, 0), (0, 0, -1)),
         ]
 
         for face_name, origin, u_vec, v_vec in faces:
