@@ -20,7 +20,7 @@ class RubiksCube3DDisplay:
         """
         self.cube = cube
 
-    def draw(self, elev=30, azim=30):
+    def draw(self, elev: float = 15, azim: float = -45):
         """
         Draws the cube in 3D using matplotlib.
 
