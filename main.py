@@ -9,4 +9,4 @@ display = RubiksCube3DDisplay(cube)
 cube.run_turns("U B D' F2 D B' U' R2 D F2 D' R2 D F2 D' R2")
 
 # Display the cube in 3D
-display.draw(elev=15, azim=-45)  # You can change angles for different views
+display.draw()  # You can change angles for different views
