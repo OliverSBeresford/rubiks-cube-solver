@@ -4,13 +4,15 @@ import numpy as np
 
 # Map sticker letters to matplotlib colors
 STICKER_COLORS = {
-    'W': 'white',
-    'Y': 'yellow',
-    'R': 'red',
-    'O': 'orange',
-    'G': 'green',
-    'B': 'blue'
+    'W': (255, 255, 255),  # White
+    'Y': (255, 255, 0),    # Yellow
+    'R': (255, 0, 0),      # Red
+    'O': (255, 165, 0),  # Orange
+    'G': (0, 255, 0),      # Green
+    'B': (0, 0, 255)      # Blue
 }
+
+STICKER_COLORS = {k: np.array(v)/255 for k, v in STICKER_COLORS.items()}
 
 class RubiksCube3DDisplay:
     def __init__(self, cube):
